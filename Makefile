@@ -56,6 +56,7 @@ SRC_UTILS = src/utils/search_last.c		\
 			src/utils/child_cleanup.c 			\
 			src/utils/safe_closer.c			\
 			src/utils/quote_stripper.c		\
+			src/utils/env_setting.c			\
 
 SRC_BUILTINS =	src/builtins/builtin_export.c				\
 				src/builtins/builtin_cd.c					\
