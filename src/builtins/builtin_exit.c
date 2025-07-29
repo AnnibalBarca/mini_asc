@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 18:56:30 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/29 17:27:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/29 17:53:44 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,43 +57,53 @@ static int	is_numeric_string(const char *str)
 	return (1);
 }
 
+void	free_exit(t_exec *exec, int parent, int status)
+{
+	if (parent)
+	{
+		if (exec->envp_exists == 1 && exec->envp)
+		{
+			free_split(exec->envp);
+			exec->envp = NULL;
+		}
+		free_parent(exec, status, NULL, NULL);
+	}
+	else
+		free_child(exec, status, NULL, NULL);
+}
+
+void	exit_args(t_exec *exec, int parent, t_args **first_arg)
+{
+	if (!exec->cmd_list->args)
+	{
+		ft_putstr_fd("exit\n", 2);
+		free_exit(exec, parent, 0);
+	}
+	(*first_arg) = exec->cmd_list->args->next;
+	if (!(*first_arg))
+	{
+		ft_putstr_fd("exit\n", 2);
+		free_exit(exec, parent, 0);
+	}
+}
+
+void	is_alpha_string(t_exec *exec, t_args *first_arg, int parent)
+{
+	if (!is_numeric_string(first_arg->cmd_args))
+	{
+		ft_putstr_fd("exit\n", 2);
+		ft_message("exit", first_arg->cmd_args, "numeric argument required");
+		free_exit(exec, parent, 2);
+	}
+}
+
 int	builtin_exit(t_exec *exec, int parent)
 {
 	int		exit_code;
 	t_args	*first_arg;
 	t_args	*second_arg;
 
-	if (!exec->cmd_list->args)
-	{
-		ft_putstr_fd("exit\n", 2);
-		if (parent)
-		{
-			if (exec->envp_exists == 1 && exec->envp)
-			{
-				free_split(exec->envp);
-				exec->envp = NULL;
-			}
-			free_parent(exec, 0, NULL, NULL);
-		}
-		else
-			free_child(exec, 0, NULL, NULL);
-	}
-	first_arg = exec->cmd_list->args->next;
-	if (!first_arg)
-	{
-		ft_putstr_fd("exit\n", 2);
-		if (parent)
-		{
-			if (exec->envp_exists == 1 && exec->envp)
-			{
-				free_split(exec->envp);
-				exec->envp = NULL;
-			}
-			free_parent(exec, 0, NULL, NULL);
-		}
-		else
-			free_child(exec, 0, NULL, NULL);
-	}
+	exit_args(exec, parent, &first_arg);
 	second_arg = first_arg->next;
 	if (second_arg)
 	{
@@ -102,50 +112,15 @@ int	builtin_exit(t_exec *exec, int parent)
 			ft_putstr_fd("exit\n", 2);
 			ft_message("exit", first_arg->cmd_args,
 				"numeric argument required");
-			if (parent)
-			{
-				if (exec->envp_exists == 1 && exec->envp)
-				{
-					free_split(exec->envp);
-					exec->envp = NULL;
-				}
-				free_parent(exec, 255, NULL, NULL);
-			}
-			else
-				free_child(exec, 255, NULL, NULL);
+			free_exit(exec, parent, 255);
 		}
 		ft_putstr_fd("exit\n", 2);
 		ft_message("exit", NULL, "too many arguments");
 		return (1);
 	}
-	if (!is_numeric_string(first_arg->cmd_args))
-	{
-		ft_putstr_fd("exit\n", 2);
-		ft_message("exit", first_arg->cmd_args, "numeric argument required");
-		if (parent)
-		{
-			if (exec->envp_exists == 1 && exec->envp)
-			{
-				free_split(exec->envp);
-				exec->envp = NULL;
-			}
-			free_parent(exec, 2, NULL, NULL);
-		}
-		else
-			free_child(exec, 2, NULL, NULL);
-	}
+	is_alpha_string(exec, first_arg, parent);
 	exit_code = ft_atoi(first_arg->cmd_args);
 	ft_putstr_fd("exit\n", 2);
-	if (parent)
-	{
-		if (exec->envp_exists == 1 && exec->envp)
-		{
-			free_split(exec->envp);
-			exec->envp = NULL;
-		}
-		free_parent(exec, (unsigned char)exit_code, NULL, NULL);
-	}
-	else
-		free_child(exec, (unsigned char)exit_code, NULL, NULL);
+	free_exit(exec, parent, (unsigned char)exit_code);
 	return ((unsigned char)exit_code);
 }
