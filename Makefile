@@ -33,6 +33,7 @@ SRC_PARSING =	src/parsing/variable_expander.c		\
 				src/parsing/variable_processor.c 		\
 				src/parsing/word_expander.c 			\
 				src/parsing/word_tokenizer.c 			\
+				src/parsing/token_expanding_processes.c \
 
 
 SRC_UTILS = src/utils/search_last.c		\
@@ -57,6 +58,7 @@ SRC_UTILS = src/utils/search_last.c		\
 			src/utils/safe_closer.c			\
 			src/utils/quote_stripper.c		\
 			src/utils/env_setting.c			\
+			src/utils/heredoc_quoting_utils.c	\
 
 SRC_BUILTINS =	src/builtins/builtin_export.c				\
 				src/builtins/builtin_cd.c					\
@@ -69,7 +71,7 @@ SRC_BUILTINS =	src/builtins/builtin_export.c				\
 SRC_SIGNALS = 	src/signal/signal_handlers.c		\
 				src/signal/signal_setup.c		\
 
-SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_BUILTINS) main/mainath.c
+SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_BUILTINS) main/maint.c
 
 GREEN=\033[0;32m
 BLUE=\033[38;2;64;224;208m

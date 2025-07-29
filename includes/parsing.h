@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 21:32:35 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/28 14:56:23 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/29 17:51:34 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,14 @@ char			*expand_token_value(const char *value, t_quote quote_type,
 					char **envp, int exit_status);
 int				should_field_split(t_quote quote_type);
 int				process_word(const char **line, t_token **head);
+int				process_heredoc_word(t_token *current, t_token **expanded_head);
+int				process_regular_word(t_token *current, t_token **expanded_head,
+					t_expand_context *ctx);
+int				process_word_token(t_token *current, t_token *prev,
+					t_token **expanded_head, t_expand_context *ctx);
+int				process_non_word_token(t_token *current,
+					t_token **expanded_head);
+int				process_single_token(t_token *current, t_token *prev,
+					t_token **expanded_head, t_expand_context *ctx);
 
 #endif

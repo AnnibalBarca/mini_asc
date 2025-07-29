@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:53 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/28 14:57:01 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/29 18:06:40 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,13 @@ int		ft_return_message(char *command, char *arg, char *error, int status);
 int		free_infile_name(t_files *files);
 void	dup_and_close(int *fd, int std);
 void	remove_env_variable(char ***env_ptr, const char *name);
+
+int		handle_quote_start(t_str_builder *sb, const char **ip,
+			char *current_quote);
+int		handle_quote_end(t_str_builder *sb, const char **ip,
+			char *current_quote);
+int		handle_single_quote(t_str_builder *sb, const char **ip);
+int		handle_double_quote_escape(t_str_builder *sb, const char **ip);
+void	free_exit(t_exec *exec, int parent, int status);
 
 #endif

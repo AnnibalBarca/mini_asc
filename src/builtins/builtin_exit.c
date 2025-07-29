@@ -3,36 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 18:56:30 by almeekel          #+#    #+#             */
-/*   Updated: 2025/07/29 17:53:44 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/29 18:07:22 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	is_numeric_string(const char *str)
+static int	long_long_checker(const char *str, int i, long long result,
+		int sign)
 {
-	int			i;
-	long long	result;
-	int			sign;
-
-	if (!str || !*str)
-		return (0);
-	i = 0;
-	while (str[i] && ft_isspace(str[i]))
-		i++;
-	sign = 1;
-	if (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
-			sign = -1;
-		i++;
-	}
-	if (!str[i])
-		return (0);
-	result = 0;
 	while (str[i] && ft_isdigit(str[i]))
 	{
 		if (sign == -1 && result == 922337203685477580LL && str[i] == '8')
@@ -57,19 +39,28 @@ static int	is_numeric_string(const char *str)
 	return (1);
 }
 
-void	free_exit(t_exec *exec, int parent, int status)
+static int	is_numeric_string(const char *str)
 {
-	if (parent)
+	int			i;
+	long long	result;
+	int			sign;
+
+	if (!str || !*str)
+		return (0);
+	i = 0;
+	while (str[i] && ft_isspace(str[i]))
+		i++;
+	sign = 1;
+	if (str[i] == '+' || str[i] == '-')
 	{
-		if (exec->envp_exists == 1 && exec->envp)
-		{
-			free_split(exec->envp);
-			exec->envp = NULL;
-		}
-		free_parent(exec, status, NULL, NULL);
+		if (str[i] == '-')
+			sign = -1;
+		i++;
 	}
-	else
-		free_child(exec, status, NULL, NULL);
+	if (!str[i])
+		return (0);
+	result = 0;
+	return (long_long_checker(str, i, result, sign));
 }
 
 void	exit_args(t_exec *exec, int parent, t_args **first_arg)
