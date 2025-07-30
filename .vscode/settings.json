@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"builtins.h": "c",
+		"cerrno": "c"
+	}
+}

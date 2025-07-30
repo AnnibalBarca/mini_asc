@@ -6,7 +6,7 @@
 /*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 13:31:06 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/29 15:48:01 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/30 12:34:57 by nagaudey         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	find_path(t_exec *exec, char *cmd)
 	char	*tmp;
 
 	i = -1;
-	if (ft_strchr(cmd, '/') && access(cmd, F_OK) == 0)
+	if (ft_strchr(cmd, '/') || access(cmd, F_OK) == 0)
 	{
 		check_exec_file(exec, cmd);
 		return ;
