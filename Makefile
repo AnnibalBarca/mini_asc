@@ -71,7 +71,7 @@ SRC_BUILTINS =	src/builtins/builtin_export.c				\
 SRC_SIGNALS = 	src/signal/signal_handlers.c		\
 				src/signal/signal_setup.c		\
 
-SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_BUILTINS) main/maint.c
+SRC_ALL = $(SRC_EXEC) $(SRC_UTILS) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_BUILTINS) main/mainath.c
 
 GREEN=\033[0;32m
 BLUE=\033[38;2;64;224;208m

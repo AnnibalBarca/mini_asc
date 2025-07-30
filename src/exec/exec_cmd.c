@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagaudey <nagaudey@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/29 15:47:55 by nagaudey         ###   ########.fr       */
+/*   Updated: 2025/07/30 09:53:33 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	exec_dir(t_exec *exec, int dir_result, char ***args_array, char **envp)
 		if (execve(exec->cmd_list->cmd_path, *args_array, envp) == -1)
 		{
 			free_split(*args_array);
-			if (errno == EISDIR)
+			if (errno == EISDIR || errno)
 				free_child(exec, 126, exec->cmd_list->cmd_path,
 					"Is a directory");
 			else if (errno == EACCES)
@@ -61,7 +61,7 @@ void	exec_dir(t_exec *exec, int dir_result, char ***args_array, char **envp)
 					"Permission denied");
 			else
 				free_child(exec, 127, exec->cmd_list->cmd_path,
-					"No such file or directory");
+					"No such file or directory1");
 		}
 	}
 }
@@ -71,9 +71,9 @@ void	ft_execve(t_exec *exec, char ***args_array, char **envp)
 	if (execve(exec->cmd_list->cmd_path, *args_array, envp) == -1)
 	{
 		free_split(*args_array);
-		if (errno == EISDIR)
+		if (errno == EACCES || errno == EISDIR)
 			free_child(exec, 126, exec->cmd_list->cmd_path, "Is a directory");
-		else if (errno == EACCES)
+		else if (errno == ENOENT || errno == EPERM)
 			free_child(exec, 126, exec->cmd_list->cmd_path,
 				"Permission denied");
 		else
