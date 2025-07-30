@@ -6,7 +6,7 @@
 /*   By: almeekel <almeekel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:47:43 by nagaudey          #+#    #+#             */
-/*   Updated: 2025/07/30 09:53:33 by almeekel         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:03:44 by almeekel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,31 @@ char	**struct_to_array(t_args *args)
 	}
 	array[i] = NULL;
 	return (array);
+}
+
+void	free_execute(t_exec *exec)
+{
+	if (errno == EACCES && !ft_strchr(exec->cmd_list->args->cmd_args, '/'))
+	{
+		free_child(exec, 127, exec->cmd_list->cmd_path, "command not found");
+	}
+	else if (errno == EACCES || errno == EPERM)
+	{
+		free_child(exec, 126, exec->cmd_list->cmd_path, "Permission denied");
+	}
+	else if (errno == ENOENT)
+	{
+		free_child(exec, 127, exec->cmd_list->cmd_path,
+			"No such file or directory");
+	}
+	else if (errno == EISDIR)
+	{
+		free_child(exec, 126, exec->cmd_list->cmd_path, "Is a directory");
+	}
+	else
+	{
+		free_child(exec, 0, exec->cmd_list->cmd_path, strerror(errno));
+	}
 }
 
 void	exec_dir(t_exec *exec, int dir_result, char ***args_array, char **envp)
